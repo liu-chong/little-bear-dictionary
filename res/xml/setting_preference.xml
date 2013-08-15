@@ -45,7 +45,7 @@
                 holo:title="字体大小" />
 
             <net.margaritov.preference.colorpicker.ColorPickerPreference
-                holo:defaultValue="@integer/COLOR_GREEN"
+                holo:defaultValue="0X00FF00"
                 holo:dependency="global_effect"
                 holo:key="global_effect_color"
                 holo:summary="@string/pf_set_english_color_summary"
@@ -79,7 +79,7 @@
                         holo:title="字体大小" />
 
                     <net.margaritov.preference.colorpicker.ColorPickerPreference
-                        holo:defaultValue="@integer/COLOR_GREEN"
+                        holo:defaultValue="0X00FF00"
                         holo:dependency="number_term"
                         holo:key="number_term_color"
                         holo:summary="设置词条序号色彩"
@@ -103,7 +103,7 @@
                         holo:title="字体大小" />
 
                     <net.margaritov.preference.colorpicker.ColorPickerPreference
-                        holo:defaultValue="@integer/COLOR_GREEN"
+                        holo:defaultValue="0X00FF00"
                         holo:dependency="individual_property"
                         holo:key="individual_property_color"
                         holo:summary="设置词性色彩"
@@ -128,7 +128,7 @@
                         holo:title="字体大小" />
 
                     <net.margaritov.preference.colorpicker.ColorPickerPreference
-                        holo:defaultValue="@integer/COLOR_GREEN"
+                        holo:defaultValue="0X00FF00"
                         holo:dependency="english_explanation"
                         holo:key="english_explanation_color"
                         holo:summary="设置英文解释色彩"
@@ -153,7 +153,7 @@
                         holo:title="字体大小" />
 
                     <net.margaritov.preference.colorpicker.ColorPickerPreference
-                        holo:defaultValue="@integer/COLOR_GREEN"
+                        holo:defaultValue="0X00FF00"
                         holo:dependency="chinese_explanation"
                         holo:key="chinese_explanation_color"
                         holo:summary="设置中文解释的颜色"
@@ -178,7 +178,7 @@
                         holo:title="字体大小" />
 
                     <net.margaritov.preference.colorpicker.ColorPickerPreference
-                        holo:defaultValue="@integer/COLOR_GREEN"
+                        holo:defaultValue="0X00FF00"
                         holo:dependency="example"
                         holo:key="example_color"
                         holo:summary="设置例句色彩"
