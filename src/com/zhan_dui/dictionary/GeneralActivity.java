@@ -78,6 +78,8 @@ public class GeneralActivity extends SlidingFragmentActivity implements
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.content_frame, new QueryWordFragment(), mTag)
 				.commit();
+		setSlidingActionBarEnabled(false);
+
 		mCurrentShowID = R.id.search;
 
 		if (isBaseDictionaryExist() == false) {
