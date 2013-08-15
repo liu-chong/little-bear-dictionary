@@ -3,7 +3,7 @@ package com.zhan_dui.dictionary.listeners;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
 
-import com.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.zhan_dui.dictionary.GeneralActivity;
 
 /**
