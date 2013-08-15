@@ -24,15 +24,6 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.umeng.fb.UMFeedbackService;
-import com.weibo.sdk.android.Oauth2AccessToken;
-import com.weibo.sdk.android.Weibo;
-import com.weibo.sdk.android.WeiboAuthListener;
-import com.weibo.sdk.android.WeiboDialogError;
-import com.weibo.sdk.android.WeiboException;
-import com.weibo.sdk.android.api.FriendshipsAPI;
-import com.weibo.sdk.android.keep.AccessTokenKeeper;
-import com.weibo.sdk.android.net.RequestListener;
-import com.weibo.sdk.android.sso.SsoHandler;
 import com.zhan_dui.dictionary.R;
 import com.zhan_dui.dictionary.utils.Constants;
 
@@ -40,17 +31,11 @@ public class AboutMeFragment extends SherlockFragment implements
 		OnClickListener {
 
 	private ActionBar mActionBar;
-	private Weibo mWeibo;
-	private Boolean mSSOAuth;
-	private SsoHandler mSsoHandler;
-	private Oauth2AccessToken mAccessToken;
 	private static Context mContext;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mWeibo = Weibo.getInstance(Constants.WEIBO_APP_KEY,
-				Constants.WEIBO_REDIRECT_URI);
 		SherlockFragmentActivity sherlockFragmentActivity = (SherlockFragmentActivity) getActivity();
 		mActionBar = sherlockFragmentActivity.getSupportActionBar();
 	}
@@ -91,16 +76,7 @@ public class AboutMeFragment extends SherlockFragment implements
 		case R.id.weibo:
 			try {
 				Class.forName("com.weibo.sdk.android.sso.SsoHandler");
-				mSSOAuth = true;
 			} catch (ClassNotFoundException e) {
-				mSSOAuth = false;
-			}
-
-			if (mSSOAuth == true) {
-				mSsoHandler = new SsoHandler(getActivity(), mWeibo);
-				mSsoHandler.authorize(new AuthDialogListener());
-			} else {
-				mWeibo.authorize(getActivity(), new AuthDialogListener());
 			}
 
 			break;
@@ -110,50 +86,6 @@ public class AboutMeFragment extends SherlockFragment implements
 		default:
 			break;
 		}
-	}
-
-	class AuthDialogListener implements WeiboAuthListener {
-
-		@Override
-		public void onCancel() {
-
-		}
-
-		@Override
-		public void onComplete(Bundle values) {
-			String token = values.getString("access_token");
-			String expires_in = values.getString("expires_in");
-			mAccessToken = new Oauth2AccessToken(token, expires_in);
-			if (mAccessToken.isSessionValid()) {
-				AccessTokenKeeper.keepAccessToken(getActivity(), mAccessToken);
-				FriendshipsAPI friendshipsAPI = new FriendshipsAPI(mAccessToken);
-				friendshipsAPI.create(Constants.WEIBO_BEAR_ID,
-						Constants.WEIBO_BEAR_NAME, new FollowListener());
-			}
-		}
-
-		@Override
-		public void onError(WeiboDialogError e) {
-			try {
-				JSONObject jsonObject = new JSONObject(e.getMessage());
-				if (jsonObject.has("error_code")
-						&& jsonObject.getInt("error_code") == 20506) {
-					Message msg = Message.obtain(FollowHandler, 0);
-					msg.sendToTarget();
-				}
-			} catch (JSONException e1) {
-				e1.printStackTrace();
-				Toast.makeText(getActivity(), e.getMessage(),
-						Toast.LENGTH_SHORT).show();
-			}
-		}
-
-		@Override
-		public void onWeiboException(WeiboException e) {
-			Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT)
-					.show();
-		}
-
 	}
 
 	private static Handler FollowHandler = new Handler() {
@@ -179,33 +111,8 @@ public class AboutMeFragment extends SherlockFragment implements
 
 	};
 
-	class FollowListener implements RequestListener {
-
-		@Override
-		public void onComplete(String response) {
-			Message msg = Message.obtain(FollowHandler, 0, response);
-			msg.sendToTarget();
-		}
-
-		@Override
-		public void onError(WeiboException e) {
-			Message msg = Message.obtain(FollowHandler, -1, e);
-			msg.sendToTarget();
-		}
-
-		@Override
-		public void onIOException(IOException e) {
-			Message msg = Message.obtain(FollowHandler, -1, e);
-			msg.sendToTarget();
-		}
-
-	}
-
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (mSsoHandler != null) {
-			mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
-		}
 	}
 }
